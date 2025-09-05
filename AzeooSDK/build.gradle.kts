@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -44,18 +45,59 @@ android {
 }
 
 dependencies {
-
-    //flutter sdk
-    // Flutter SDK AARs (per build type)
+    // Flutter SDK AARs (per build type) - resolved from the local libs repository
     debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
     add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
     releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
 
-
+    // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    
+    // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                
+                groupId = "com.azeoo.sdk"
+                artifactId = "azeoo-sdk-android"
+                version = "1.0.0"
+                
+                pom {
+                    name.set("Azeoo SDK for Android")
+                    description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
+                    url.set("https://github.com/azeoo/mobile-sdk")
+                    
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+                    
+                    developers {
+                        developer {
+                            id.set("azeoo")
+                            name.set("Azeoo Team")
+                            email.set("dev@azeoo.com")
+                        }
+                    }
+                    
+                    scm {
+                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
+                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
+                        url.set("https://github.com/azeoo/mobile-sdk")
+                    }
+                }
+            }
+        }
+    }
 }

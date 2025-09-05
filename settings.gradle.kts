@@ -17,11 +17,19 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://storage.googleapis.com/download.flutter.io")
-        maven("/Users/stein/Documents/DEV/AZEOO/sdk/nutrition_sdk/build/host/outputs/repo")
+        // maven("/Users/stein/Documents/DEV/AZEOO/sdk/nutrition_sdk/build/host/outputs/repo")
         maven("https://jitpack.io")
+        // Local Flutter AARs repository - contains the built Flutter SDK files
+        flatDir {
+            dirs("libs")
+        }
+        maven {
+            url = uri("libs")
+        }
     }
 }
 
 rootProject.name = "AzeooSDK"
 include(":app")
+include(":AzeooSDK")
 
