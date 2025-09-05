@@ -1,13 +1,11 @@
-group: com.azeoo.sdk
 jdk:
   - openjdk11
 
+before_install:
+  - chmod +x gradlew
+
 install:
-  - echo "Building AzeooSDK library for JitPack"
-  - ./gradlew :AzeooSDK:clean :AzeooSDK:build :AzeooSDK:publishToMavenLocal
+  - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
 env:
-  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=768m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
-
-# Repository information
-# Source: https://github.com/azeoo/mobile-sdk
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
