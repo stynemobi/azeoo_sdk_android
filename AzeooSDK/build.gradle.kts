@@ -12,6 +12,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        ndk {
+            // Filter for architectures supported by Flutter
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
     }
 
     buildTypes {
@@ -21,6 +26,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("profile") {
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -33,6 +44,13 @@ android {
 }
 
 dependencies {
+
+    //flutter sdk
+    // Flutter SDK AARs (per build type)
+    debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
+    releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

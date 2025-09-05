@@ -1,44 +1,50 @@
-# Azeoo Nutrition SDK
+# Azeoo SDK for Android
 
-A Flutter-based nutrition SDK for Android applications that provides comprehensive nutrition tracking, user management, and health metrics functionality.
+A native Android wrapper for the Azeoo Nutrition & Training SDK built with Flutter. This SDK provides comprehensive nutrition and training features with offline support, theming, localization, and analytics.
 
 ## Features
 
-- 🍎 **Nutrition Tracking**: Comprehensive nutrition and health metrics
-- 👤 **User Management**: User profiles, authentication, and data management
-- 🎨 **Customizable UI**: Theme support with light/dark mode
-- 🔒 **Secure**: API key authentication and secure data handling
-- 📱 **Flexible Integration**: Embed anywhere in your Android app
-- 🚀 **Flutter Powered**: Modern, performant Flutter-based UI
+- 🥗 **Nutrition Module**: Food tracking, meal planning, barcode scanning, recipe management
+- 🏋️ **Training Module**: Workout plans, exercises, progress tracking, scheduling
+- 📱 **Native Integration**: Seamless integration with existing Android applications
+- 🚀 **Performance Optimized**: Flutter engine caching and lifecycle management
+- 🔄 **Offline Support**: Built-in caching for offline functionality
+- 🎨 **Themeable**: Customizable colors and themes
+- 🌍 **Localized**: Multi-language support
+- 📊 **Analytics**: Built-in analytics and user tracking
 
 ## Installation
 
-### JitPack (Recommended for immediate use)
+### Gradle (Recommended)
 
-Add JitPack repository to your project-level `settings.gradle.kts`:
+Add the JitPack repository to your project's `build.gradle` file:
 
-```kotlin
-dependencyResolutionManagement {
+```gradle
+allprojects {
     repositories {
         // ... other repositories
-        maven("https://jitpack.io")
+        maven { url 'https://jitpack.io' }
     }
 }
 ```
 
-Add the dependency to your app-level `build.gradle.kts`:
+Add the dependency to your app's `build.gradle` file:
 
-```kotlin
+```gradle
 dependencies {
-    implementation("com.github.azeoo:azeoo_sdk_android:1.0.0")
+    implementation 'com.azeoo.sdk:azeoo-sdk-android:1.0.0'
 }
 ```
 
-### Maven Central (Coming Soon)
+### Manual AAR Integration
 
-```kotlin
+1. Download the AAR file from releases
+2. Copy to `app/libs/` directory
+3. Add to `build.gradle`:
+
+```gradle
 dependencies {
-    implementation("com.azeoo.sdk:azeoo-sdk-android:1.0.0")
+    implementation files('libs/azeoo-sdk-android-1.0.0.aar')
 }
 ```
 
@@ -47,141 +53,372 @@ dependencies {
 ### 1. Initialize the SDK
 
 ```kotlin
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
+## Import required classes
+import com.azeoo.sdk.*
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var azeooClient: AzeooClient
+    private lateinit var azeooUser: AzeooUser
+    private lateinit var azeooUI: AzeooUI
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         
-        // Initialize Azeoo SDK
-        AzeooSDK.initialize(this)
+        // Initialize SDK
+        lifecycleScope.launch {
+            initializeSDK()
+        }
+    }
+    
+    private suspend fun initializeSDK() {
+        try {
+            // Step 1: Initialize client with API key
+            val config = SDKConfig.Builder()
+                .enableAnalytics(true)
+                .enableOfflineSupport(true)
+                .enableLogging(BuildConfig.DEBUG)
+                .build()
+                
+            azeooClient = AzeooClient.initialize(
+                context = this@MainActivity,
+                apiKey = "your_api_key_here",
+                config = config
+            )
+            
+            // Step 2: Create user instance
+            azeooUser = azeooClient.createUser("user_123")
+            
+            // Step 3: Initialize UI with configuration
+            val uiConfig = UIConfig.Builder()
+                .userId("user_123")
+                .authToken("user_auth_token")
+                .locale("en")
+                .analyticsEnabled(true)
+                .theme(createCustomTheme())
+                .build()
+                
+            azeooUI = azeooClient.createUI(uiConfig)
+            
+            // SDK is ready to use!
+            showNutritionScreen()
+            
+        } catch (e: Exception) {
+            Log.e("AzeooSDK", "Failed to initialize SDK", e)
+        }
+    }
+    
+    private fun createCustomTheme(): ThemeConfig {
+        return ThemeConfig.Builder()
+            .lightPrimaryColor(Color.parseColor("#2196F3"))
+            .darkPrimaryColor(Color.parseColor("#1976D2"))
+            .successColor(Color.parseColor("#4CAF50"))
+            .errorColor(Color.parseColor("#F44336"))
+            .build()
+    }
+    
+    private suspend fun showNutritionScreen() {
+        azeooUI.nutrition.showMainScreen()
     }
 }
 ```
 
-### 2. Configure the SDK
+### 2. Using Modules
+
+#### Nutrition Module
 
 ```kotlin
-val config = SDKConfiguration.builder()
-    .apiKey("your_api_key")
-    .userId("user123")
-    .authToken("auth_token")
-    .locale("en")
-    .enableAnalytics(true)
-    .theme(ThemeConfiguration.light())
-    .build()
+// Show main nutrition screen
+azeooUI.nutrition.showMainScreen()
 
-// Configure the SDK
-AzeooSDK.configure(config)
+// Show specific screens
+azeooUI.nutrition.showNutritionPlans()
+azeooUI.nutrition.showRecipes()
+azeooUI.nutrition.showBarcodeScanner()
+azeooUI.nutrition.showCart()
+
+// Show specific nutrition plan
+azeooUI.nutrition.showNutritionPlan("plan_123")
+
+// Show specific recipe
+azeooUI.nutrition.showRecipe(recipeId = 456, recipeName = "Healthy Salad")
 ```
 
-### 3. Show Nutrition Screen
+#### Training Module
 
 ```kotlin
-// Show the main nutrition screen
-AzeooUI.showMainScreen(context)
+// Show main training screen
+azeooUI.training.showMainScreen()
+
+// Show specific screens
+azeooUI.training.showWorkoutPlans()
+azeooUI.training.showExercises()
+azeooUI.training.showProgress()
+azeooUI.training.showSchedule()
+
+// Show specific workout plan
+azeooUI.training.showWorkoutPlan("workout_123")
+
+// Show specific exercise
+azeooUI.training.showExercise("exercise_456")
 ```
 
-## Advanced Usage
-
-### Custom Theme Configuration
+#### User Management
 
 ```kotlin
-val theme = ThemeConfiguration.dark(
-    primaryColor = Color.parseColor("#FF6B6B")
+// Get user profile
+val profile = azeooUser.getProfile()
+println("User: ${profile.firstName} ${profile.lastName}")
+
+// Update user information
+azeooUser.changeHeight(175.5) // cm
+azeooUser.changeWeight(70.2)  // kg
+
+// Update profile
+val updates = mapOf(
+    "firstName" to "John",
+    "lastName" to "Doe",
+    "email" to "john.doe@example.com"
 )
+azeooUser.update(updates)
 
-val config = SDKConfiguration.builder()
-    .apiKey("your_api_key")
-    .userId("user123")
-    .authToken("auth_token")
-    .theme(theme)
+// Get user info
+val userInfo = azeooUser.getUserInfo()
+println("Subscriptions: ${userInfo.subscriptions}")
+```
+
+### 3. Fragment Integration
+
+You can embed Flutter screens directly in your layouts:
+
+```kotlin
+class NutritionFragment : Fragment() {
+    
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_nutrition, container, false)
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        // Create Flutter fragment
+        val flutterFragment = azeooUI.createFlutterFragment(
+            initialRoute = "/nutrition",
+            arguments = mapOf("userId" to "user_123")
+        )
+        
+        // Add to container
+        childFragmentManager.beginTransaction()
+            .replace(R.id.flutter_container, flutterFragment)
+            .commit()
+    }
+}
+```
+
+Layout file (`fragment_nutrition.xml`):
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <FrameLayout
+        android:id="@+id/flutter_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+        
+</FrameLayout>
+```
+
+## Advanced Configuration
+
+### Custom Themes
+
+```kotlin
+val themeConfig = ThemeConfig.Builder()
+    .lightPrimaryColor(Color.parseColor("#FF5722"))
+    .lightSecondaryColor(Color.parseColor("#FFC107"))
+    .lightBackgroundColor(Color.WHITE)
+    .darkPrimaryColor(Color.parseColor("#D32F2F"))
+    .darkSecondaryColor(Color.parseColor("#FF8F00"))
+    .darkBackgroundColor(Color.parseColor("#121212"))
+    .successColor(Color.parseColor("#4CAF50"))
+    .errorColor(Color.parseColor("#F44336"))
+    .warningColor(Color.parseColor("#FF9800"))
     .build()
 ```
 
 ### Safe Area Configuration
 
 ```kotlin
-val safeArea = SafeAreaConfiguration(
-    top = true,      // Respect top safe area
-    bottom = true,   // Respect bottom safe area
-    left = false,    // Don't respect left safe area
-    right = false    // Don't respect right safe area
-)
-
-val config = SDKConfiguration.builder()
-    .apiKey("your_api_key")
-    .userId("user123")
-    .authToken("auth_token")
-    .safeArea(safeArea)
+val safeAreaConfig = SafeAreaConfig.Builder()
+    .top(true)     // Respect status bar
+    .bottom(false) // Ignore navigation bar
+    .left(true)
+    .right(true)
     .build()
 ```
 
-### Deep Link Support
+### Deep Link Configuration
 
 ```kotlin
-val deepLinks = DeepLinkConfiguration(
-    scheme = "azeoo",
-    host = "nutrition",
-    enabledPaths = listOf("/profile", "/nutrition"),
-    enableUniversalLinks = true
-)
-
-val config = SDKConfiguration.builder()
-    .apiKey("your_api_key")
-    .userId("user123")
-    .authToken("auth_token")
-    .deepLinks(deepLinks)
+val deepLinkConfig = DeepLinkConfig.Builder()
+    .customScheme("nutrition")
+    .addUniversalLinkHost("nutrition.com")
+    .addUniversalLinkHost("app.nutrition.com")
+    .enableDebugLogging(BuildConfig.DEBUG)
     .build()
 ```
+
+### Cache Configuration
+
+```kotlin
+val config = SDKConfig.Builder()
+    .enableOfflineSupport(true)
+    .cacheSize(100 * 1024 * 1024L) // 100MB
+    .build()
+
+// Set cache limits after initialization
+azeooClient.getCacheManager()?.setCacheLimits(
+    memorySizeMB = 50,
+    diskSizeMB = 200L
+)
+
+// Get cache statistics
+val stats = azeooClient.getCacheManager()?.getStatistics()
+println("Memory cache: ${stats?.memoryEntries} entries, ${stats?.memorySizeBytes} bytes")
+```
+
+## Error Handling
+
+```kotlin
+try {
+    azeooUI.nutrition.showMainScreen()
+} catch (e: SDKInitializationException) {
+    Log.e("SDK", "SDK not properly initialized", e)
+} catch (e: UIOperationException) {
+    Log.e("SDK", "UI operation failed", e)
+} catch (e: UserOperationException) {
+    Log.e("SDK", "User operation failed", e)
+} catch (e: Exception) {
+    Log.e("SDK", "Unexpected error", e)
+}
+```
+
+## Lifecycle Management
+
+The SDK automatically manages Flutter engine lifecycle, but you should dispose resources when done:
+
+```kotlin
+override fun onDestroy() {
+    super.onDestroy()
+    
+    // Dispose SDK resources
+    if (::azeooClient.isInitialized) {
+        azeooClient.dispose()
+    }
+}
+```
+
+## Proguard Rules
+
+Add these rules to your `proguard-rules.pro` file:
+
+```proguard
+# Keep Azeoo SDK classes
+-keep class com.azeoo.sdk.** { *; }
+
+# Keep Flutter classes
+-keep class io.flutter.** { *; }
+
+# Keep Gson classes for JSON serialization
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+```
+
+## Permissions
+
+The SDK requires these permissions in your `AndroidManifest.xml`:
+
+```xml
+<!-- Network permissions -->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+<!-- Camera permission for barcode scanning -->
+<uses-permission android:name="android.permission.CAMERA" />
+
+<!-- Storage permissions for caching -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **SDK Initialization Failed**
+   - Verify your API key is correct
+   - Check network connectivity
+   - Ensure all required permissions are granted
+
+2. **Flutter Engine Issues**
+   - Clear app data and cache
+   - Restart the app
+   - Check device available memory
+
+3. **Navigation Not Working**
+   - Ensure UI is properly initialized before navigation
+   - Check that the target route exists
+
+4. **Cache Issues**
+   - Clear app cache in device settings
+   - Reduce cache size limits
+   - Check available storage space
+
+### Debug Logging
+
+Enable debug logging to get more information:
+
+```kotlin
+val config = SDKConfig.Builder()
+    .enableLogging(true)
+    .build()
+```
+
+## API Reference
+
+For detailed API documentation, see the individual class documentation:
+
+- [`AzeooClient`](src/main/kotlin/com/azeoo/sdk/AzeooClient.kt) - Main SDK entry point
+- [`AzeooUser`](src/main/kotlin/com/azeoo/sdk/AzeooUser.kt) - User management
+- [`AzeooUI`](src/main/kotlin/com/azeoo/sdk/AzeooUI.kt) - UI management
+- [`SDKConfig`](src/main/kotlin/com/azeoo/sdk/SDKConfig.kt) - Configuration classes
+- [`FlutterEngineManager`](src/main/kotlin/com/azeoo/sdk/FlutterEngineManager.kt) - Engine lifecycle
+- [`CacheManager`](src/main/kotlin/com/azeoo/sdk/CacheManager.kt) - Cache management
 
 ## Requirements
 
-- **Minimum SDK**: 24 (Android 7.0)
-- **Target SDK**: 36 (Android 14)
-- **Kotlin**: 2.0.21+
-- **Android Gradle Plugin**: 8.12.1+
-
-## Dependencies
-
-The SDK automatically includes these dependencies:
-- Flutter Embedding
-- AndroidX Lifecycle
-- AndroidX Activity Compose
-- Gson for JSON handling
-- Kotlin Coroutines
-
-## Architecture
-
-The SDK follows modern Android development best practices:
-
-- **Lifecycle Awareness**: Proper lifecycle management with ProcessLifecycleOwner
-- **Coroutines**: Asynchronous operations using Kotlin Coroutines
-- **State Management**: Reactive state management with StateFlow
-- **Fragment Integration**: Seamless integration with existing Android UI
-- **Method Channels**: Flutter-Native communication via method channels
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- Android API level 21 (Android 5.0) or higher
+- Kotlin 1.8.0 or higher
+- AndroidX libraries
 
 ## Support
 
-For support and questions:
-- Create an issue on GitHub
-- Contact: your.email@example.com
+For support, please contact:
+- Email: dev@azeoo.com
+- Documentation: [Azeoo SDK Docs](https://docs.azeoo.com)
+- Issues: [GitHub Issues](https://github.com/azeoo/mobile-sdk/issues)
 
-## Changelog
+## License
 
-### Version 1.0.0
-- Initial release
-- Core nutrition tracking functionality
-- User management system
-- Customizable themes
-- Flutter-based UI
+This SDK is licensed under the MIT License. See [LICENSE](LICENSE) file for details.

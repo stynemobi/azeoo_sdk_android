@@ -1,0 +1,16 @@
+group: com.azeoo.sdk
+jdk:
+  - openjdk11
+
+before_install:
+  - ./scripts/setup.sh
+
+install:
+  - echo "Running custom install command"
+  - ./gradlew clean build publishToMavenLocal
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+
+# Repository information
+# Source: https://bitbucket.org/azeoo/mobile-sdk/src/main/
