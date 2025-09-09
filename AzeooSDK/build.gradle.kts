@@ -48,6 +48,7 @@ android {
 
 
 dependencies {
+
     // Flutter SDK AARs - resolved from the local libs Maven repository
     debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
     add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
