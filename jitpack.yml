@@ -14,7 +14,10 @@ install:
   - cp -r libs/dev build/libs/
   - cp -r libs/io build/libs/
   - ls -la build/libs/
+  - ls -la build/libs/com/azeoo/sdk/
+  - ls -la build/libs/io/flutter/plugins/sharedpreferences/
   - find build/libs -name "*.aar" | head -10
+  - ls -la build/libs/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/1.0/
   - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
