@@ -90,9 +90,9 @@ class NutritionModule internal constructor(
     }
 
     /**
-     * Get Flutter fragment for embedding in Android views
+     * Get Fragment for embedding in Android views
      */
-    fun getFragment(): FlutterFragment {
+    fun getFragment(): Fragment {
         val engineId = AzeooCore.shared.getEngineIdForModule(AzeooModule.NUTRITION)
         return createFlutterFragmentWithCachedEngine(engineId!!)
     }

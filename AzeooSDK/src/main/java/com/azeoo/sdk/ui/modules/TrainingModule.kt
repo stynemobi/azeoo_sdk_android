@@ -1,5 +1,6 @@
 package com.azeoo.sdk.ui.modules
 
+
 import androidx.fragment.app.Fragment
 import com.azeoo.sdk.client.AzeooClient
 import com.azeoo.sdk.config.Config
@@ -89,9 +90,9 @@ class TrainingModule internal constructor(
     }
 
     /**
-     * Get Flutter fragment for embedding in Android views
+     * Get Fragment for embedding in Android views
      */
-    fun getFragment(): FlutterFragment {
+    fun getFragment(): Fragment {
         val engineId = AzeooCore.shared.getEngineIdForModule(AzeooModule.TRAINING)
         return createFlutterFragmentWithCachedEngine(engineId!!)
     }

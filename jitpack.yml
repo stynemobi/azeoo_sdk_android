@@ -10,7 +10,7 @@ install:
   - echo "=== Starting JitPack Build Process ==="
   - ./gradlew clean --no-daemon --stacktrace
   - echo "=== Building Android SDK ==="
-  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
+  - ./gradlew :AzeooSDK:assemble --no-daemon --stacktrace
   - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 env:

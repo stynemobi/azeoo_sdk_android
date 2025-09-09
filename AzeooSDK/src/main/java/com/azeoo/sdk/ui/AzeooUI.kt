@@ -262,17 +262,17 @@ class AzeooUI private constructor(
     // MARK: - Flutter Fragment Management
 
     /**
-     * Get default Flutter fragment (single instance mode)
+     * Get default Fragment (single instance mode)
      */
-    fun getDefaultFlutterFragment(): FlutterFragment? {
+    fun getDefaultFlutterFragment(): Fragment? {
         val engineId = AzeooCore.shared.getEngineIdForModule(null)
         return engineId?.let { createFlutterFragmentWithCachedEngine(it) }
     }
 
     /**
-     * Get new Flutter fragment with specific name
+     * Get new Fragment with specific name
      */
-    fun getNewFlutterFragment(name: String): FlutterFragment? {
+    fun getNewFlutterFragment(name: String): Fragment? {
         val module = AzeooModule.fromString(name) ?: AzeooModule.SHARED
         val engineId = AzeooCore.shared.getEngineIdForModule(module)
         return engineId?.let { createFlutterFragmentWithCachedEngine(it) }
