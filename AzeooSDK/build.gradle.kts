@@ -71,19 +71,25 @@ afterEvaluate {
     publishing {
         publications {
             register<MavenPublication>("release") {
-//                from(components["release"])
+                from(components["release"])
                 
                 groupId = "com.azeoo.sdk"
                 artifactId = "azeoosdk"
                 version = "3.0.0"
 
-                afterEvaluate {
-                    from(components["release"])
+                // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
+                pom.withXml {
+                    val dependenciesNode = asNode().appendNode("dependencies")
+                    configurations.implementation.get().allDependencies.forEach { dep ->
+                        // Only include non-Flutter dependencies in the published POM
+                        if (dep.group != "com.azeoo.sdk" || !dep.name.startsWith("flutter_")) {
+                            val dependencyNode = dependenciesNode.appendNode("dependency")
+                            dependencyNode.appendNode("groupId", dep.group)
+                            dependencyNode.appendNode("artifactId", dep.name)
+                            dependencyNode.appendNode("version", dep.version)
+                        }
+                    }
                 }
-
-                  
-                // Note: Flutter dependencies are embedded in the AAR and should not be published as transitive dependencies
-                // They will be available to consuming apps through the local libs repository
 
                 pom {
                     name.set("Azeoo SDK for Android")
