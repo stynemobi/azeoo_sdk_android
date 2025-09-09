@@ -10,8 +10,11 @@ install:
   # - mkdir -p build/AzeooSDK/libs
   # - cp -r libs/* build/AzeooSDK/libs/
   - mkdir -p build/libs
-  - cp -r libs/* build/libs/
-  - ls -la build/libs/com/azeoo/sdk/
+  - cp -r libs/com build/libs/
+  - cp -r libs/dev build/libs/
+  - cp -r libs/io build/libs/
+  - ls -la build/libs/
+  - find build/libs -name "*.aar" | head -10
   - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
