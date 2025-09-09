@@ -7,8 +7,10 @@ before_install:
 install:
   - ./gradlew clean
   - ./gradlew :AzeooSDK:preBuild
-  - mkdir -p build/AzeooSDK/libs
-  - cp -r libs/* build/AzeooSDK/libs/
+  # - mkdir -p build/AzeooSDK/libs
+  # - cp -r libs/* build/AzeooSDK/libs/
+  - mkdir -p build/libs
+  - cp -r libs/* build/libs/
   - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
