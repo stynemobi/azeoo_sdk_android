@@ -74,7 +74,7 @@ afterEvaluate {
                 
                 groupId = "com.azeoo.sdk"
                 artifactId = "azeoosdk"
-                version = "2.1.5"
+                version = "2.2.2"
 
                 pom {
                     name.set("Azeoo SDK for Android")
