@@ -1,4 +1,11 @@
 jdk:
   - openjdk17
+before_install:
+  - echo "Forcing Java 17"
+  - export JAVA_HOME=$JAVA17_HOME
+  - java -version
+  - echo "Upgrading Gradle wrapper to latest version"
+  - ./gradlew wrapper --gradle-version=8.5 --no-daemon || gradle wrapper --gradle-version=8.5
+  - chmod +x gradlew
 install:
-  - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon
+  - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace

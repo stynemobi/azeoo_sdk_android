@@ -76,6 +76,20 @@ afterEvaluate {
                 artifactId = "azeoosdk"
                 version = "2.2.2"
 
+                  
+                  // Exclude Flutter AAR dependencies from published POM
+                // pom.withXml {
+                //     val dependenciesNode = asNode().appendNode("dependencies")
+                //     configurations.implementation.get().allDependencies.forEach { dep ->
+                //         if (!dep.group?.contains("flutter") == true) {
+                //             val dependencyNode = dependenciesNode.appendNode("dependency")
+                //             dependencyNode.appendNode("groupId", dep.group)
+                //             dependencyNode.appendNode("artifactId", dep.name)
+                //             dependencyNode.appendNode("version", dep.version)
+                //         }
+                //     }
+                // }
+
                 pom {
                     name.set("Azeoo SDK for Android")
                     description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
