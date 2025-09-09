@@ -1,25 +1,30 @@
 jdk:
-  - openjdk17
+  - openjdk11
 
 before_install:
   - chmod +x gradlew
+  - echo "=== JitPack Build for Azeoo Android SDK ==="
+  - echo "Verifying source Flutter AAR dependencies..."
+  - ls -la libs/com/azeoo/sdk/ || echo "ERROR: Main Flutter AARs not found in source!"
+  - find libs -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found in source:"
 
 install:
-  - ./gradlew clean
-  - ./gradlew :AzeooSDK:preBuild
-  # - mkdir -p build/AzeooSDK/libs
-  # - cp -r libs/* build/AzeooSDK/libs/
+  - echo "=== Starting JitPack Build Process ==="
+  - ./gradlew clean --no-daemon --stacktrace
+  - echo "=== CRITICAL: Copying Flutter AARs to build directory ==="
+  - echo "JitPack resolves dependencies from build/libs/, not libs/"
   - mkdir -p build/libs
   - cp -r libs/com build/libs/
-  - cp -r libs/dev build/libs/
+  - cp -r libs/dev build/libs/ 
   - cp -r libs/io build/libs/
-  - ls -la build/libs/
-  - ls -la build/libs/com/azeoo/sdk/
-  - ls -la build/libs/io/flutter/plugins/sharedpreferences/
-  - find build/libs -name "*.aar" | head -10
-  - ls -la build/libs/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/1.0/
-  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
+  - echo "=== Verifying AARs copied to build/libs ==="
+  - ls -la build/libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "❌ FAILED: flutter_release AAR not in build/libs!"
+  - ls -la build/libs/com/azeoo/sdk/flutter_debug/1.0/flutter_debug-1.0.aar || echo "❌ FAILED: flutter_debug AAR not in build/libs!"
+  - ls -la build/libs/com/azeoo/sdk/flutter_profile/1.0/flutter_profile-1.0.aar || echo "❌ FAILED: flutter_profile AAR not in build/libs!"
+  - echo "=== Building Android SDK ==="
+  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace --info
+  - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
-# env:
-#   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8"

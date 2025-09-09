@@ -18,13 +18,22 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://storage.googleapis.com/download.flutter.io")
 
-        // maven("/Users/stein/Documents/DEV/AZEOO/sdk/nutrition_sdk/build/host/outputs/repo")
-        // Local Flutter AARs repository - contains the built Flutter SDK files
-        flatDir {
-            dirs("libs")
+        // Local Flutter AARs repository - JitPack copies files to build/libs
+        // JitPack resolves dependencies from build directory, not source
+        maven {
+            url = uri("file://${rootProject.projectDir}/build/libs")
+            metadataSources {
+                gradleMetadata()
+                mavenPom()
+            }
         }
+        // Fallback: Source directory for local development
         maven {
             url = uri("libs")
+            metadataSources {
+                gradleMetadata()
+                mavenPom()
+            }
         }
     }
 }
