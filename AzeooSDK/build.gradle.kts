@@ -74,7 +74,7 @@ afterEvaluate {
                 
                 groupId = "com.azeoo.sdk"
                 artifactId = "azeoosdk"
-                version = project.version
+                version = "3.0.0"
 
                   
                   // Exclude Flutter AAR dependencies from published POM
