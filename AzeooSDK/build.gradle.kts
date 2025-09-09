@@ -51,9 +51,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.17.0")
 
     // Flutter SDK AARs - resolved from the local libs Maven repository
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
+    // Use version 3.0.0 to match the SDK version and ensure JitPack can find them
+    debugImplementation("com.azeoo.sdk:flutter_debug:3.0.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:3.0.0")
+    releaseImplementation("com.azeoo.sdk:flutter_release:3.0.0")
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
@@ -77,18 +78,8 @@ afterEvaluate {
                 version = "3.0.0"
 
                   
-                  // Exclude Flutter AAR dependencies from published POM
-                // pom.withXml {
-                //     val dependenciesNode = asNode().appendNode("dependencies")
-                //     configurations.implementation.get().allDependencies.forEach { dep ->
-                //         if (!dep.group?.contains("flutter") == true) {
-                //             val dependencyNode = dependenciesNode.appendNode("dependency")
-                //             dependencyNode.appendNode("groupId", dep.group)
-                //             dependencyNode.appendNode("artifactId", dep.name)
-                //             dependencyNode.appendNode("version", dep.version)
-                //         }
-                //     }
-                // }
+                // Note: Flutter dependencies are embedded in the AAR and should not be published as transitive dependencies
+                // They will be available to consuming apps through the local libs repository
 
                 pom {
                     name.set("Azeoo SDK for Android")
