@@ -73,39 +73,38 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                // from(components["release"])
+                from(components["release"])
                 
                 groupId = "com.azeoo.sdk"
                 artifactId = "azeoosdk"
                 version = "2.1.1"
 
+                pom {
+                    name.set("Azeoo SDK for Android")
+                    description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
+                    url.set("https://github.com/azeoo/mobile-sdk")
 
-//                pom {
-//                    name.set("Azeoo SDK for Android")
-//                    description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
-//                    url.set("https://github.com/azeoo/mobile-sdk")
-//
-//                    licenses {
-//                        license {
-//                            name.set("MIT License")
-//                            url.set("https://opensource.org/licenses/MIT")
-//                        }
-//                    }
-//
-//                    developers {
-//                        developer {
-//                            id.set("azeoo")
-//                            name.set("Azeoo Team")
-//                            email.set("dev@azeoo.com")
-//                        }
-//                    }
-//
-//                    scm {
-//                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
-//                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
-//                        url.set("https://github.com/azeoo/mobile-sdk")
-//                    }
-//                }
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("azeoo")
+                            name.set("Azeoo Team")
+                            email.set("dev@azeoo.com")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
+                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
+                        url.set("https://github.com/azeoo/mobile-sdk")
+                    }
+                }
             }
         }
     }

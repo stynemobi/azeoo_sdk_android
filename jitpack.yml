@@ -9,6 +9,7 @@ install:
   - ./gradlew :AzeooSDK:preBuild
   - mkdir -p build/AzeooSDK/libs
   - cp -r libs/* build/AzeooSDK/libs/
+  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
 # env:
