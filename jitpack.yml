@@ -1,13 +1,11 @@
 jdk:
   - openjdk17
-
 before_install:
   - chmod +x gradlew
   - echo "=== JitPack Build for Azeoo Android SDK ==="
   - echo "Verifying Flutter AAR dependencies are committed..."
   - find libs -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found:"
-  - ls -la libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "ERROR: Main Flutter release AAR missing!"
-
+  - 'ls -la libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "ERROR: Main Flutter release AAR missing!"'
 install:
   - echo "=== Starting JitPack Build Process ==="
   - ./gradlew clean --no-daemon --stacktrace
@@ -15,6 +13,5 @@ install:
   - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
-
 env:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8"
