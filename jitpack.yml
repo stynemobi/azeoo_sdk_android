@@ -4,8 +4,8 @@ jdk:
 before_install:
   - chmod +x gradlew
 
-# install:
-#   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
+install:
+  - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
-# env:
-#   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
