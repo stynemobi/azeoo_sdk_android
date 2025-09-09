@@ -44,8 +44,11 @@ android {
     }
 }
 
+// Repositories are handled by settings.gradle.kts
+
+
 dependencies {
-    // Flutter SDK AARs (per build type) - resolved from the local libs repository
+    // Flutter SDK AARs - resolved from the local libs Maven repository
     debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
     add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
     releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
@@ -68,9 +71,9 @@ afterEvaluate {
                 from(components["release"])
                 
                 groupId = "com.azeoo.sdk"
-                artifactId = "azeoo-sdk-android"
+                artifactId = "azeoosdk"
                 version = "1.0.0"
-                
+
                 pom {
                     name.set("Azeoo SDK for Android")
                     description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
