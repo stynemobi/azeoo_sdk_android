@@ -3,10 +3,13 @@ jdk:
 
 before_install:
   - chmod +x gradlew
-  - cp -r libs ./
 
-# install:
-#   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
+install:
+  - ./gradlew clean
+  - ./gradlew :AzeooSDK:preBuild
+  - mkdir -p build/AzeooSDK/libs
+  - cp -r libs/* build/AzeooSDK/libs/
+  - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
 # env:
 #   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
