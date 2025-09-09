@@ -114,3 +114,4 @@ Desktop.ini
 # Temporary files
 *.tmp
 *.temp
+/.claude/
