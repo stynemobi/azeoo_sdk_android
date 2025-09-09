@@ -28,12 +28,12 @@ android {
                 "proguard-rules.pro"
             )
         }
-//        getByName("debug") {
-//            signingConfig = signingConfigs.getByName("debug")
-//        }
-//        create("profile") {
-//            initWith(getByName("debug"))
-//        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("profile") {
+            initWith(getByName("debug"))
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -48,12 +48,10 @@ android {
 
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.17.0")
-
     // Flutter SDK AARs - resolved from the local libs Maven repository
-    // Use version 3.0.0 to match the SDK version and ensure JitPack can find them
-    //debugImplementation("com.azeoo.sdk:flutter_debug:3.0.0")
-    //add("profileImplementation", "com.azeoo.sdk:flutter_profile:3.0.0")
+    // Use for all build types to ensure Flutter classes are available during compilation
+    debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
     releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
 
     // Core Android dependencies
@@ -79,14 +77,20 @@ afterEvaluate {
 
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
                 pom.withXml {
-                    val dependenciesNode = asNode().appendNode("dependencies")
-                    configurations.implementation.get().allDependencies.forEach { dep ->
-                        // Only include non-Flutter dependencies in the published POM
-                        if (dep.group != "com.azeoo.sdk" || !dep.name.startsWith("flutter_")) {
-                            val dependencyNode = dependenciesNode.appendNode("dependency")
-                            dependencyNode.appendNode("groupId", dep.group)
-                            dependencyNode.appendNode("artifactId", dep.name)
-                            dependencyNode.appendNode("version", dep.version)
+                    val dependenciesNode = asNode().get("dependencies")
+                    if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
+                        val deps = dependenciesNode[0] as groovy.util.Node
+                        // Remove Flutter dependencies
+                        deps.children().removeIf { child ->
+                            if (child is groovy.util.Node) {
+                                val groupId = child.get("groupId")
+                                val artifactId = child.get("artifactId")
+                                if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
+                                    val group = groupId.text()
+                                    val artifact = artifactId.text()
+                                    group == "com.azeoo.sdk" && artifact.startsWith("flutter_")
+                                } else false
+                            } else false
                         }
                     }
                 }
