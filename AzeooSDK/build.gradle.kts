@@ -48,7 +48,7 @@ android {
 
 
 dependencies {
-    implementation(fileTree("libs") {
+    implementation(fileTree("../libs") {
         include("**/*.aar")
     })
     implementation("androidx.core:core-ktx:1.17.0")

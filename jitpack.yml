@@ -3,6 +3,7 @@ jdk:
 
 before_install:
   - chmod +x gradlew
+  - cp -r libs ./
 
 # install:
 #   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
