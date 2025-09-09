@@ -21,10 +21,10 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
         // Local Flutter AARs repository - contains the built Flutter SDK files
         flatDir {
-            dirs("libs")
+            dirs("AzeooSDK/libs")
         }
         maven {
-            url = uri("libs")
+            url = uri("AzeooSDK/libs")
         }
     }
 }
