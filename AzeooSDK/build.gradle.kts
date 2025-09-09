@@ -48,6 +48,10 @@ android {
 
 
 dependencies {
+    implementation(fileTree("libs") {
+        include("**/*.aar")
+    })
+    implementation("androidx.core:core-ktx:1.17.0")
 
     // Flutter SDK AARs - resolved from the local libs Maven repository
     debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
@@ -75,36 +79,33 @@ afterEvaluate {
                 artifactId = "azeoosdk"
                 version = "1.0.0"
 
-                fileTree("AzeooSDK/libs").include("**/*.aar").each { file ->
-                artifact(file)
-            }
 
-                pom {
-                    name.set("Azeoo SDK for Android")
-                    description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
-                    url.set("https://github.com/azeoo/mobile-sdk")
-                    
-                    licenses {
-                        license {
-                            name.set("MIT License")
-                            url.set("https://opensource.org/licenses/MIT")
-                        }
-                    }
-                    
-                    developers {
-                        developer {
-                            id.set("azeoo")
-                            name.set("Azeoo Team")
-                            email.set("dev@azeoo.com")
-                        }
-                    }
-                    
-                    scm {
-                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
-                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
-                        url.set("https://github.com/azeoo/mobile-sdk")
-                    }
-                }
+//                pom {
+//                    name.set("Azeoo SDK for Android")
+//                    description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
+//                    url.set("https://github.com/azeoo/mobile-sdk")
+//
+//                    licenses {
+//                        license {
+//                            name.set("MIT License")
+//                            url.set("https://opensource.org/licenses/MIT")
+//                        }
+//                    }
+//
+//                    developers {
+//                        developer {
+//                            id.set("azeoo")
+//                            name.set("Azeoo Team")
+//                            email.set("dev@azeoo.com")
+//                        }
+//                    }
+//
+//                    scm {
+//                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
+//                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
+//                        url.set("https://github.com/azeoo/mobile-sdk")
+//                    }
+//                }
             }
         }
     }
