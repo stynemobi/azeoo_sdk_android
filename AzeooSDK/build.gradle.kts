@@ -68,11 +68,15 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                from(components["release"])
+                // from(components["release"])
                 
                 groupId = "com.azeoo.sdk"
                 artifactId = "azeoosdk"
                 version = "1.0.0"
+
+                fileTree("AzeooSDK/libs").include("**/*.aar").each { file ->
+                artifact(file)
+            }
 
                 pom {
                     name.set("Azeoo SDK for Android")
