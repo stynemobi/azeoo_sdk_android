@@ -1,0 +1,116 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.tekartik.sqflite",
+    "module": "sqflite_android_release",
+    "version": "3.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.12"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-a8bfdfc394deaed5c57bd45a64ac4294dc976a72"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqflite_android_release-3.0.0.aar",
+          "url": "sqflite_android_release-3.0.0.aar",
+          "size": 43605,
+          "sha512": "f031f1e48b67329e55eaf0ea1c7cd9ec0e75c2779239e9a09ea2eef6f0c34d559e9b7fcd2810bd71d0a7908443d7a372a7513d6f2d5b6cb147e0f9dbf9555768",
+          "sha256": "89439d1977d36fd11b813f4aa429071827518d0af8caacf2f10dc933b5791997",
+          "sha1": "3fe77b0a27719f135eae791cc8dd246e02687f95",
+          "md5": "23722bb3a90622af9a0efd917fd478ca"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-a8bfdfc394deaed5c57bd45a64ac4294dc976a72"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqflite_android_release-3.0.0.aar",
+          "url": "sqflite_android_release-3.0.0.aar",
+          "size": 43605,
+          "sha512": "f031f1e48b67329e55eaf0ea1c7cd9ec0e75c2779239e9a09ea2eef6f0c34d559e9b7fcd2810bd71d0a7908443d7a372a7513d6f2d5b6cb147e0f9dbf9555768",
+          "sha256": "89439d1977d36fd11b813f4aa429071827518d0af8caacf2f10dc933b5791997",
+          "sha1": "3fe77b0a27719f135eae791cc8dd246e02687f95",
+          "md5": "23722bb3a90622af9a0efd917fd478ca"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "sqflite_android_release-3.0.0-sources.jar",
+          "url": "sqflite_android_release-3.0.0-sources.jar",
+          "size": 23906,
+          "sha512": "84be2e0f11f6739735214c714fcf25ca7b657afc40b3b54a0f0eff0de0f085cc926571087ab261b90cb6ed1e0be787046b45db4603790b883b119c835c22aa20",
+          "sha256": "a127166bbaf1689504c6fc9e5111043a0537dc09ba3ea55a6d743da958ef125a",
+          "sha1": "55f721f93f9c468c9d426bc61ff59a393e267750",
+          "md5": "3f9cd042a556379914178c3426bed53c"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "sqflite_android_release-3.0.0-javadoc.jar",
+          "url": "sqflite_android_release-3.0.0-javadoc.jar",
+          "size": 341675,
+          "sha512": "5b5bb743b2a23e3558713aa438a939cb401366d043236818609aeb429db465eb6a8ebbed8e02ebfd94b58e8a0654ad92dce950d9039510b032451033767fcb43",
+          "sha256": "1a727b075fc55fbd1d09bbd3524d01ddfa4dfd3dd81ace8d07f44da338b83686",
+          "sha1": "902e7b498d39bf5bb92b74a951654d952a1823ea",
+          "md5": "313efce12187c0a14564592ebc12ee49"
+        }
+      ]
+    }
+  ]
+}
