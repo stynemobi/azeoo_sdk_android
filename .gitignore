@@ -1,8 +1,11 @@
 # Built application files
 *.apk
-*.aar
 *.ap_
 *.aab
+
+# Exclude AAR files except those in libs/ directory (Flutter dependencies)
+*.aar
+!libs/**/*.aar
 
 # Files for the ART/Dalvik VM
 *.dex

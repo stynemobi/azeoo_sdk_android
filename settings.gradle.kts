@@ -18,16 +18,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://storage.googleapis.com/download.flutter.io")
 
-        // Local Flutter AARs repository - JitPack copies files to build/libs
-        // JitPack resolves dependencies from build directory, not source
-        maven {
-            url = uri("file://${rootProject.projectDir}/build/libs")
-            metadataSources {
-                gradleMetadata()
-                mavenPom()
-            }
-        }
-        // Fallback: Source directory for local development
+        // Local Flutter AARs repository - committed to source control
         maven {
             url = uri("libs")
             metadataSources {

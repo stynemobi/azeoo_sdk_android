@@ -1,28 +1,18 @@
 jdk:
-  - openjdk11
+  - openjdk17
 
 before_install:
   - chmod +x gradlew
   - echo "=== JitPack Build for Azeoo Android SDK ==="
-  - echo "Verifying source Flutter AAR dependencies..."
-  - ls -la libs/com/azeoo/sdk/ || echo "ERROR Main Flutter AARs not found in source"
-  - find libs -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found in source"
+  - echo "Verifying Flutter AAR dependencies are committed..."
+  - find libs -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found:"
+  - ls -la libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "ERROR: Main Flutter release AAR missing!"
 
 install:
   - echo "=== Starting JitPack Build Process ==="
   - ./gradlew clean --no-daemon --stacktrace
-  - echo "=== CRITICAL Copying Flutter AARs to build directory ==="
-  - echo "JitPack resolves dependencies from build/libs not libs"
-  - mkdir -p build/libs
-  - cp -r libs/com build/libs/
-  - cp -r libs/dev build/libs/
-  - cp -r libs/io build/libs/
-  - echo "=== Verifying AARs copied to build/libs ==="
-  - ls -la build/libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "FAILED flutter_release AAR not in build/libs"
-  - ls -la build/libs/com/azeoo/sdk/flutter_debug/1.0/flutter_debug-1.0.aar || echo "FAILED flutter_debug AAR not in build/libs"
-  - ls -la build/libs/com/azeoo/sdk/flutter_profile/1.0/flutter_profile-1.0.aar || echo "FAILED flutter_profile AAR not in build/libs"
   - echo "=== Building Android SDK ==="
-  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace --info
+  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
   - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
 
