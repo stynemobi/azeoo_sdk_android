@@ -1,11 +1,17 @@
 jdk:
   - openjdk17
 before_install:
-  - echo "Forcing Java 17"
-  - export JAVA_HOME=$JAVA17_HOME
-  - java -version
-  - echo "Upgrading Gradle wrapper to latest version"
-  - ./gradlew wrapper --gradle-version=8.13 --no-daemon || gradle wrapper --gradle-version=8.13
   - chmod +x gradlew
+  - echo "=== JitPack Build for Azeoo Android SDK ==="
+  - echo "Verifying Flutter AAR dependencies are committed..."
+  - find libs -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found:"
+  - 'ls -la libs/com/azeoo/sdk/flutter_release/1.0/flutter_release-1.0.aar || echo "ERROR: Main Flutter release AAR missing!"'
 install:
+  - echo "=== Starting JitPack Build Process ==="
+  - ./gradlew clean --no-daemon --stacktrace
+  - echo "=== Building Android SDK ==="
+  - ./gradlew :AzeooSDK:assembleRelease --no-daemon --stacktrace
+  - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8"
