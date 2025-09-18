@@ -54,10 +54,6 @@ dependencies {
     add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
     releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
 
-    debugImplementation("com.azeoo.sdk:flutter_debug:3.0.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:3.0.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:3.0.0")
-
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
