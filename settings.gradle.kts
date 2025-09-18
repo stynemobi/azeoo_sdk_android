@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 
         // Local Flutter AARs repository - committed to source control
         maven {
-            url = uri("libs")
+            url = uri("AzeooSDK/flutter-deps")
             metadataSources {
                 gradleMetadata()
                 mavenPom()

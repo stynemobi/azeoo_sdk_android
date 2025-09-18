@@ -3,9 +3,9 @@
 *.ap_
 *.aab
 
-# Exclude AAR files except those in libs/ directory (Flutter dependencies)
+# Exclude AAR files except those in AzeooSDK/flutter-deps/ directory (Flutter dependencies)
 *.aar
-!libs/**/*.aar
+!AzeooSDK/flutter-deps/**/*.aar
 
 # Files for the ART/Dalvik VM
 *.dex
