@@ -76,9 +76,9 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 from(components["release"])
                 
-                groupId = "com.azeoo.sdk"
+                groupId = "com.github.stynemobi"
                 artifactId = "azeoosdk"
-                version = "3.0.0"
+                version = "1.0"
 
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
                 pom.withXml {
