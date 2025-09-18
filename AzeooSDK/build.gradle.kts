@@ -49,10 +49,11 @@ android {
 
 dependencies {
     // Flutter SDK AARs - resolved from the local libs Maven repository
-    // Use for all build types to ensure Flutter classes are available during compilation
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
+    // Use compileOnly to ensure Flutter classes are available during compilation
+    // but don't expose them as transitive dependencies in the published module metadata
+    debugCompileOnly("com.azeoo.sdk:flutter_debug:1.0.0")
+    add("profileCompileOnly", "com.azeoo.sdk:flutter_profile:1.0.0")
+    releaseCompileOnly("com.azeoo.sdk:flutter_release:1.0.0")
 
 
     // Core Android dependencies
@@ -73,7 +74,7 @@ afterEvaluate {
                 from(components["release"])
                 
                 groupId = "com.github.stynemobi"
-                artifactId = "azeoosdk"
+                artifactId = "azeoo_sdk_android"
                 version = "1.0.0"
 
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
