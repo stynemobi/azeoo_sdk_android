@@ -6,16 +6,20 @@ before_install:
   - echo "Verifying Flutter AAR dependencies are committed..."
   - find AzeooSDK/flutter-deps -name "*.aar" -type f | wc -l | xargs echo "Total AAR files found:"
   - 'ls -la AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar || echo "ERROR: Main Flutter release AAR missing!"'
+  - echo "=== Hiding Flutter AARs from JitPack artifact detection ==="
+  - mv AzeooSDK/flutter-deps AzeooSDK/.flutter-deps-hidden
 install:
   - echo "=== Starting JitPack Build Process ==="
   - ./gradlew clean --no-daemon --stacktrace
+  - echo "=== Restoring Flutter AARs for build ==="
+  - mv AzeooSDK/.flutter-deps-hidden AzeooSDK/flutter-deps
   - echo "=== Building Android SDK ==="
   - ./gradlew :AzeooSDK:assemble --no-daemon --stacktrace
   - echo "=== Publishing to Maven Local ==="
   - ./gradlew :AzeooSDK:publishToMavenLocal --no-daemon --stacktrace
   - echo "=== Verifying published POM ==="
-  - cat ~/.m2/repository/com/github/stynemobi/azeoo_sdk_android/1.0.0/azeoo_sdk_android-1.0.0.pom
+  - cat ~/.m2/repository/com/github/stynemobi/azeoo_sdk_android/1.0.1/azeoo_sdk_android-1.0.1.pom
   - echo "=== Checking for Flutter dependencies in POM ==="
-  - grep -i "flutter" ~/.m2/repository/com/github/stynemobi/azeoo_sdk_android/1.0.0/azeoo_sdk_android-1.0.0.pom || echo "No Flutter dependencies found in POM - Good!"
+  - grep -i "flutter" ~/.m2/repository/com/github/stynemobi/azeoo_sdk_android/1.0.1/azeoo_sdk_android-1.0.1.pom || echo "No Flutter dependencies found in POM - Good!"
 env:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8"
