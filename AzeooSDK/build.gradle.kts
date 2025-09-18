@@ -50,9 +50,9 @@ android {
 dependencies {
     // Flutter SDK AARs - resolved from the local libs Maven repository
     // Use for all build types to ensure Flutter classes are available during compilation
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0")
+    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
+    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
 
 
     // Core Android dependencies
@@ -74,7 +74,7 @@ afterEvaluate {
                 
                 groupId = "com.github.stynemobi"
                 artifactId = "azeoosdk"
-                version = "1.0"
+                version = "1.0.0"
 
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
                 pom.withXml {
@@ -99,7 +99,7 @@ afterEvaluate {
                 pom {
                     name.set("Azeoo SDK for Android")
                     description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
-                    url.set("https://github.com/azeoo/mobile-sdk")
+                    url.set("https://github.com/stynemobi/mobile-sdk")
 
                     licenses {
                         license {
@@ -110,16 +110,16 @@ afterEvaluate {
 
                     developers {
                         developer {
-                            id.set("azeoo")
+                            id.set("stynemobi")
                             name.set("Azeoo Team")
                             email.set("dev@azeoo.com")
                         }
                     }
 
                     scm {
-                        connection.set("scm:git:git://github.com/azeoo/mobile-sdk.git")
-                        developerConnection.set("scm:git:ssh://github.com/azeoo/mobile-sdk.git")
-                        url.set("https://github.com/azeoo/mobile-sdk")
+                        connection.set("scm:git:git://github.com/stynemobi/mobile-sdk.git")
+                        developerConnection.set("scm:git:ssh://github.com/stynemobi/mobile-sdk.git")
+                        url.set("https://github.com/stynemobi/mobile-sdk")
                     }
                 }
             }
