@@ -91,31 +91,31 @@ afterEvaluate {
                 version = sdkVersion
                 
                 // Transform Flutter dependencies to use JitPack coordinates in POM
-                pom.withXml {
-                    val dependenciesNode = asNode().get("dependencies")
-                    if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
-                        val deps = dependenciesNode[0] as groovy.util.Node
-                        // Transform Flutter dependencies to JitPack coordinates
-                        deps.children().forEach { child ->
-                            if (child is groovy.util.Node) {
-                                val groupId = child.get("groupId")
-                                val artifactId = child.get("artifactId")
-                                if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
-                                    val group = groupId.text()
-                                    val artifact = artifactId.text()
-                                    if (group == "com.azeoo.sdk" && artifact.startsWith("flutter_")) {
-                                        // Transform to JitPack coordinates
-                                        (groupId[0] as groovy.util.Node).setValue("com.github.stynemobi.azeoo_sdk_android")
-                                        val version = child.get("version")
-                                        if (version is groovy.util.NodeList) {
-                                            (version[0] as groovy.util.Node).setValue(sdkVersion)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                // pom.withXml {
+                //     val dependenciesNode = asNode().get("dependencies")
+                //     if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
+                //         val deps = dependenciesNode[0] as groovy.util.Node
+                //         // Transform Flutter dependencies to JitPack coordinates
+                //         deps.children().forEach { child ->
+                //             if (child is groovy.util.Node) {
+                //                 val groupId = child.get("groupId")
+                //                 val artifactId = child.get("artifactId")
+                //                 if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
+                //                     val group = groupId.text()
+                //                     val artifact = artifactId.text()
+                //                     if (group == "com.azeoo.sdk" && artifact.startsWith("flutter_")) {
+                //                         // Transform to JitPack coordinates
+                //                         (groupId[0] as groovy.util.Node).setValue("com.github.stynemobi.azeoo_sdk_android")
+                //                         val version = child.get("version")
+                //                         if (version is groovy.util.NodeList) {
+                //                             (version[0] as groovy.util.Node).setValue(sdkVersion)
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
                 
                 pom {
                     name.set("Azeoo SDK for Android")

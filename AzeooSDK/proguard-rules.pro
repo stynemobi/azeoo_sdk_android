@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Flutter keep rules - prevent stripping of Flutter engine classes
+-keep class io.flutter.** { *; }
+-keep class io.flutter.embedding.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.plugins.** { *; }
+-dontwarn io.flutter.**
