@@ -5,3 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
 }
+
+// Set the project version - this will be used by all subprojects
+version = "1.0.6"
