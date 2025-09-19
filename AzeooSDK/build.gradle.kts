@@ -79,7 +79,7 @@ dependencies {
 
 afterEvaluate {
     // Define version for all publications - use the project version
-    val sdkVersion = "1.0.9"
+    val sdkVersion = "1.0.10"
     
     publishing {
         publications {
@@ -92,24 +92,24 @@ afterEvaluate {
                 version = sdkVersion
                 
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
-                pom.withXml {
-                    val dependenciesNode = asNode().get("dependencies")
-                    if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
-                        val deps = dependenciesNode[0] as groovy.util.Node
-                        // Remove Flutter dependencies
-                        deps.children().removeIf { child ->
-                            if (child is groovy.util.Node) {
-                                val groupId = child.get("groupId")
-                                val artifactId = child.get("artifactId")
-                                if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
-                                    val group = groupId.text()
-                                    val artifact = artifactId.text()
-                                    group == "com.azeoo.sdk" && artifact.startsWith("flutter_")
-                                } else false
-                            } else false
-                        }
-                    }
-                }
+                // pom.withXml {
+                //     val dependenciesNode = asNode().get("dependencies")
+                //     if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
+                //         val deps = dependenciesNode[0] as groovy.util.Node
+                //         // Remove Flutter dependencies
+                //         deps.children().removeIf { child ->
+                //             if (child is groovy.util.Node) {
+                //                 val groupId = child.get("groupId")
+                //                 val artifactId = child.get("artifactId")
+                //                 if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
+                //                     val group = groupId.text()
+                //                     val artifact = artifactId.text()
+                //                     group == "com.azeoo.sdk" && artifact.startsWith("flutter_")
+                //                 } else false
+                //             } else false
+                //         }
+                //     }
+                // }
                 
                 pom {
                     name.set("Azeoo SDK for Android")
