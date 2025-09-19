@@ -59,11 +59,10 @@ android {
 
 
 dependencies {
-    // Flutter SDK AARs - resolved from the local libs Maven repository
-    // Use implementation to ensure Flutter classes are available at runtime
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
+    // Flutter SDK AARs - Use api to expose to JitPack consumers
+    debugApi("com.azeoo.sdk:flutter_debug:1.0.0")
+    add("profileApi", "com.azeoo.sdk:flutter_profile:1.0.0")
+    releaseApi("com.azeoo.sdk:flutter_release:1.0.0")
 
 
     // Core Android dependencies
@@ -79,7 +78,7 @@ dependencies {
 
 afterEvaluate {
     // Define version for all publications - use the project version
-    val sdkVersion = "1.0.10"
+    val sdkVersion = "1.0.11"
     
     publishing {
         publications {
@@ -91,25 +90,32 @@ afterEvaluate {
                 artifactId = "azeoo_sdk_android"
                 version = sdkVersion
                 
-                // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
-                // pom.withXml {
-                //     val dependenciesNode = asNode().get("dependencies")
-                //     if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
-                //         val deps = dependenciesNode[0] as groovy.util.Node
-                //         // Remove Flutter dependencies
-                //         deps.children().removeIf { child ->
-                //             if (child is groovy.util.Node) {
-                //                 val groupId = child.get("groupId")
-                //                 val artifactId = child.get("artifactId")
-                //                 if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
-                //                     val group = groupId.text()
-                //                     val artifact = artifactId.text()
-                //                     group == "com.azeoo.sdk" && artifact.startsWith("flutter_")
-                //                 } else false
-                //             } else false
-                //         }
-                //     }
-                // }
+                // Transform Flutter dependencies to use JitPack coordinates in POM
+                pom.withXml {
+                    val dependenciesNode = asNode().get("dependencies")
+                    if (dependenciesNode is groovy.util.NodeList && dependenciesNode.isNotEmpty()) {
+                        val deps = dependenciesNode[0] as groovy.util.Node
+                        // Transform Flutter dependencies to JitPack coordinates
+                        deps.children().forEach { child ->
+                            if (child is groovy.util.Node) {
+                                val groupId = child.get("groupId")
+                                val artifactId = child.get("artifactId")
+                                if (groupId is groovy.util.NodeList && artifactId is groovy.util.NodeList) {
+                                    val group = groupId.text()
+                                    val artifact = artifactId.text()
+                                    if (group == "com.azeoo.sdk" && artifact.startsWith("flutter_")) {
+                                        // Transform to JitPack coordinates
+                                        (groupId[0] as groovy.util.Node).setValue("com.github.stynemobi.azeoo_sdk_android")
+                                        val version = child.get("version")
+                                        if (version is groovy.util.NodeList) {
+                                            (version[0] as groovy.util.Node).setValue(sdkVersion)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 pom {
                     name.set("Azeoo SDK for Android")
@@ -144,9 +150,9 @@ afterEvaluate {
                 groupId = "com.github.stynemobi.azeoo_sdk_android"
                 artifactId = "flutter_release"
                 version = sdkVersion
-                
+
                 // Find and publish the Flutter release AAR
-                val flutterReleaseAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
+                val flutterReleaseAar = file("flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
                 if (flutterReleaseAar.exists()) {
                     artifact(flutterReleaseAar)
                 }
