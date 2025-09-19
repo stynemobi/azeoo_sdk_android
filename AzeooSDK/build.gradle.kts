@@ -78,7 +78,7 @@ dependencies {
 
 afterEvaluate {
     // Define version for all publications - use the project version
-    val sdkVersion = "1.0.11"
+    val sdkVersion = "1.0.12"
     
     publishing {
         publications {
