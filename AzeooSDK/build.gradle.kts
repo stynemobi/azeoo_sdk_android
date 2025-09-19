@@ -79,7 +79,7 @@ dependencies {
 
 afterEvaluate {
     // Define version for all publications - use the project version
-    val sdkVersion = project.version.toString()
+    val sdkVersion = "1.0.9"
     
     publishing {
         publications {
