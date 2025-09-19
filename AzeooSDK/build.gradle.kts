@@ -4,6 +4,11 @@ plugins {
     id("maven-publish")
 }
 
+// Disable Gradle module metadata generation to prevent Flutter dependencies from appearing
+tasks.withType<GenerateModuleMetadata> {
+    enabled = false
+}
+
 android {
     namespace = "com.azeoo.sdk"
     compileSdk = 36
@@ -35,6 +40,12 @@ android {
             initWith(getByName("debug"))
         }
     }
+    
+    packagingOptions {
+        // Include Flutter AARs in the final AAR
+        pickFirst("**/flutter_*.aar")
+        pickFirst("**/flutter_*.jar")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -50,7 +61,6 @@ android {
 dependencies {
     // Flutter SDK AARs - resolved from the local libs Maven repository
     // Use implementation to ensure Flutter classes are available at runtime
-    // but exclude them from published POM via pom.withXml filtering
     debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
     add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
     releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
@@ -68,15 +78,19 @@ dependencies {
 }
 
 afterEvaluate {
+    // Define version for all publications
+    val sdkVersion = "1.0.0"
+    
     publishing {
         publications {
+            // Main SDK publication
             register<MavenPublication>("release") {
                 from(components["release"])
                 
                 groupId = "com.github.stynemobi"
                 artifactId = "azeoo_sdk_android"
-                version = "1.0.0"
-
+                version = sdkVersion
+                
                 // Exclude Flutter AAR dependencies from published POM so consumers don't try to resolve them
                 pom.withXml {
                     val dependenciesNode = asNode().get("dependencies")
@@ -96,7 +110,7 @@ afterEvaluate {
                         }
                     }
                 }
-
+                
                 pom {
                     name.set("Azeoo SDK for Android")
                     description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
@@ -122,6 +136,45 @@ afterEvaluate {
                         developerConnection.set("scm:git:ssh://github.com/stynemobi/mobile-sdk.git")
                         url.set("https://github.com/stynemobi/mobile-sdk")
                     }
+                }
+            }
+            
+            // Flutter release AAR publication
+            register<MavenPublication>("flutterRelease") {
+                groupId = "com.github.stynemobi.azeoo_sdk_android"
+                artifactId = "flutter_release"
+                version = sdkVersion
+                
+                // Find and publish the Flutter release AAR
+                val flutterReleaseAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
+                if (flutterReleaseAar.exists()) {
+                    artifact(flutterReleaseAar)
+                }
+            }
+            
+            // Flutter debug AAR publication
+            register<MavenPublication>("flutterDebug") {
+                groupId = "com.github.stynemobi.azeoo_sdk_android"
+                artifactId = "flutter_debug"
+                version = sdkVersion
+                
+                // Find and publish the Flutter debug AAR
+                val flutterDebugAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_debug/1.0.0/flutter_debug-1.0.0.aar")
+                if (flutterDebugAar.exists()) {
+                    artifact(flutterDebugAar)
+                }
+            }
+            
+            // Flutter profile AAR publication
+            register<MavenPublication>("flutterProfile") {
+                groupId = "com.github.stynemobi.azeoo_sdk_android"
+                artifactId = "flutter_profile"
+                version = sdkVersion
+                
+                // Find and publish the Flutter profile AAR
+                val flutterProfileAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_profile/1.0.0/flutter_profile-1.0.0.aar")
+                if (flutterProfileAar.exists()) {
+                    artifact(flutterProfileAar)
                 }
             }
         }
