@@ -4,10 +4,6 @@ plugins {
     id("maven-publish")
 }
 
-// Disable Gradle module metadata generation to prevent Flutter dependencies from appearing
-tasks.withType<GenerateModuleMetadata> {
-    enabled = false
-}
 
 android {
     namespace = "com.azeoo.sdk"
@@ -41,11 +37,6 @@ android {
         }
     }
     
-    packagingOptions {
-        // Include Flutter AARs in the final AAR
-        pickFirst("**/flutter_*.aar")
-        pickFirst("**/flutter_*.jar")
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -59,12 +50,9 @@ android {
 
 
 dependencies {
-    // Flutter SDK AARs - resolved from the local libs Maven repository
-    // Use implementation to ensure Flutter classes are available at runtime
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
-
+    // Flutter SDK AARs - use only the release version for all build types
+    // This prevents conflicts and matches what we publish as a separate artifact
+    implementation("com.azeoo.sdk:flutter_release:1.0.0")
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
@@ -139,7 +127,8 @@ afterEvaluate {
                 }
             }
             
-            // Flutter release AAR publication
+            // Only publish the release Flutter AAR as a separate artifact
+            // This is what consuming apps expect to find
             register<MavenPublication>("flutterRelease") {
                 groupId = "com.github.stynemobi.azeoo_sdk_android"
                 artifactId = "flutter_release"
@@ -149,32 +138,6 @@ afterEvaluate {
                 val flutterReleaseAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
                 if (flutterReleaseAar.exists()) {
                     artifact(flutterReleaseAar)
-                }
-            }
-            
-            // Flutter debug AAR publication
-            register<MavenPublication>("flutterDebug") {
-                groupId = "com.github.stynemobi.azeoo_sdk_android"
-                artifactId = "flutter_debug"
-                version = sdkVersion
-                
-                // Find and publish the Flutter debug AAR
-                val flutterDebugAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_debug/1.0.0/flutter_debug-1.0.0.aar")
-                if (flutterDebugAar.exists()) {
-                    artifact(flutterDebugAar)
-                }
-            }
-            
-            // Flutter profile AAR publication
-            register<MavenPublication>("flutterProfile") {
-                groupId = "com.github.stynemobi.azeoo_sdk_android"
-                artifactId = "flutter_profile"
-                version = sdkVersion
-                
-                // Find and publish the Flutter profile AAR
-                val flutterProfileAar = file("../AzeooSDK/flutter-deps/com/azeoo/sdk/flutter_profile/1.0.0/flutter_profile-1.0.0.aar")
-                if (flutterProfileAar.exists()) {
-                    artifact(flutterProfileAar)
                 }
             }
         }
