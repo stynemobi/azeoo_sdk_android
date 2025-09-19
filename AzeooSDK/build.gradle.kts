@@ -49,11 +49,11 @@ android {
 
 dependencies {
     // Flutter SDK AARs - resolved from the local libs Maven repository
-    // Use compileOnly to ensure Flutter classes are available during compilation
-    // but don't expose them as transitive dependencies in the published module metadata
-    debugCompileOnly("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileCompileOnly", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseCompileOnly("com.azeoo.sdk:flutter_release:1.0.0")
+    // Use implementation to ensure Flutter classes are available at runtime
+    // but exclude them from published POM via pom.withXml filtering
+    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
+    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
 
 
     // Core Android dependencies
