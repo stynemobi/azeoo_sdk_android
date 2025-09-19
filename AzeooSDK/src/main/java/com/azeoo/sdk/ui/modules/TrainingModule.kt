@@ -92,7 +92,7 @@ class TrainingModule internal constructor(
     /**
      * Get Fragment for embedding in Android views
      */
-    fun getFragment(): FlutterFragment {
+    fun getFragment(): Fragment {
         val engineId = AzeooCore.shared.getEngineIdForModule(AzeooModule.TRAINING)
         return createFlutterFragmentWithCachedEngine(engineId!!)
     }

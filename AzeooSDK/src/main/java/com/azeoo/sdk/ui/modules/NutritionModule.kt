@@ -1,5 +1,8 @@
 package com.azeoo.sdk.ui.modules
 
+import android.view.View
+import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
 import com.azeoo.sdk.client.AzeooClient
 import com.azeoo.sdk.config.Config
 import com.azeoo.sdk.core.AzeooCore
@@ -91,7 +94,7 @@ class NutritionModule internal constructor(
     /**
      * Get Fragment for embedding in Android views
      */
-    fun getFragment(): FlutterFragment {
+    fun getFragment(): Fragment {
         val engineId = AzeooCore.shared.getEngineIdForModule(AzeooModule.NUTRITION)
         return createFlutterFragmentWithCachedEngine(engineId!!)
     }
