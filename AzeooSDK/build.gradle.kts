@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -33,15 +35,16 @@ android {
                 "proguard-rules.pro"
             )
         }
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-        create("profile") {
-            initWith(getByName("debug"))
-        }
+         getByName("debug") {
+             signingConfig = signingConfigs.getByName("debug")
+         }
+         create("profile") {
+             initWith(getByName("debug"))
+         }
     }
-    
-    packagingOptions {
+
+    // Include Flutter AARs in the final AAR
+    fun Packaging.() {
         // Include Flutter AARs in the final AAR
         pickFirst("**/flutter_*.aar")
         pickFirst("**/flutter_*.jar")
@@ -60,9 +63,9 @@ android {
 
 dependencies {
     // Flutter SDK AARs - Use api to expose to JitPack consumers
-    debugApi("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileApi", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseApi("com.azeoo.sdk:flutter_release:1.0.0")
+    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
+    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
+    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
 
 
     // Core Android dependencies
@@ -78,7 +81,7 @@ dependencies {
 
 afterEvaluate {
     // Define version for all publications - use the project version
-    val sdkVersion = "1.0.12"
+    val sdkVersion = "1.0.13"
     
     publishing {
         publications {
@@ -145,18 +148,18 @@ afterEvaluate {
                 }
             }
             
-            // Flutter release AAR publication
-            register<MavenPublication>("flutterRelease") {
-                groupId = "com.github.stynemobi.azeoo_sdk_android"
-                artifactId = "flutter_release"
-                version = sdkVersion
+            // // Flutter release AAR publication
+            // register<MavenPublication>("flutterRelease") {
+            //     groupId = "com.github.stynemobi.azeoo_sdk_android"
+            //     artifactId = "flutter_release"
+            //     version = sdkVersion
 
-                // Find and publish the Flutter release AAR
-                val flutterReleaseAar = file("flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
-                if (flutterReleaseAar.exists()) {
-                    artifact(flutterReleaseAar)
-                }
-            }
+            //     // Find and publish the Flutter release AAR
+            //     val flutterReleaseAar = file("flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
+            //     if (flutterReleaseAar.exists()) {
+            //         artifact(flutterReleaseAar)
+            //     }
+            // }
             
           
         }
