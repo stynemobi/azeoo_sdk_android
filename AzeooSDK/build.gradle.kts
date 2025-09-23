@@ -65,6 +65,11 @@ dependencies {
     releaseApi("com.azeoo.sdk:flutter_release:1.0.0")
 
 
+    api("io.flutter:flutter_embedding_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:armeabi_v7a_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:arm64_v8a_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:x86_64_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
