@@ -7,4 +7,4 @@ plugins {
 }
 
 // Set the project version - this will be used by all subprojects
-version = "1.0.8"
+version = "1.0.14"

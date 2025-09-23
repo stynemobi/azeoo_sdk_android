@@ -35,20 +35,20 @@ android {
                 "proguard-rules.pro"
             )
         }
-         getByName("debug") {
-             signingConfig = signingConfigs.getByName("debug")
-         }
-         create("profile") {
-             initWith(getByName("debug"))
-         }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("profile") {
+            initWith(getByName("debug"))
+        }
     }
 
     // Include Flutter AARs in the final AAR
-    fun Packaging.() {
-        // Include Flutter AARs in the final AAR
-        pickFirst("**/flutter_*.aar")
-        pickFirst("**/flutter_*.jar")
-    }
+//    fun Packaging.() {
+//        // Include Flutter AARs in the final AAR
+//        pickFirst("**/flutter_*.aar")
+//        pickFirst("**/flutter_*.jar")
+//    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -63,16 +63,27 @@ android {
 
 dependencies {
     // Flutter SDK AARs - Use api to expose to JitPack consumers
-    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
-    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
-    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
+//    debugImplementation("com.azeoo.sdk:flutter_debug:1.0.0")
+//    add("profileImplementation", "com.azeoo.sdk:flutter_profile:1.0.0")
+//    releaseImplementation("com.azeoo.sdk:flutter_release:1.0.0")
+    debugImplementation(files("libs/com/azeoo/sdk/flutter_debug/1.0.0/flutter_debug-1.0.0.aar"))
+    add(
+        "profileImplementation",
+        files("libs/com/azeoo/sdk/flutter_profile/1.0.0/flutter_profile-1.0.0.aar")
+    )
+    releaseImplementation(files("libs/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar"))
+
+    api("io.flutter:flutter_embedding_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:armeabi_v7a_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:arm64_v8a_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
+    api("io.flutter:x86_64_release:1.0.0-c29809135135e262a912cf583b2c90deb9ded610")
 
 
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    
+
     // Testing dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -82,17 +93,17 @@ dependencies {
 afterEvaluate {
     // Define version for all publications - use the project version
     val sdkVersion = "1.0.13"
-    
+
     publishing {
         publications {
             // Main SDK publication
             register<MavenPublication>("release") {
                 from(components["release"])
-                
+
                 groupId = "com.github.stynemobi"
                 artifactId = "azeoo_sdk_android"
                 version = sdkVersion
-                
+
                 // Transform Flutter dependencies to use JitPack coordinates in POM
                 // pom.withXml {
                 //     val dependenciesNode = asNode().get("dependencies")
@@ -119,7 +130,7 @@ afterEvaluate {
                 //         }
                 //     }
                 // }
-                
+
                 pom {
                     name.set("Azeoo SDK for Android")
                     description.set("Native Android wrapper for Azeoo SDK - Flutter-based nutrition and health management")
@@ -147,7 +158,7 @@ afterEvaluate {
                     }
                 }
             }
-            
+
             // // Flutter release AAR publication
             // register<MavenPublication>("flutterRelease") {
             //     groupId = "com.github.stynemobi.azeoo_sdk_android"
@@ -155,13 +166,13 @@ afterEvaluate {
             //     version = sdkVersion
 
             //     // Find and publish the Flutter release AAR
-            //     val flutterReleaseAar = file("flutter-deps/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
+            //     val flutterReleaseAar = file("libs/com/azeoo/sdk/flutter_release/1.0.0/flutter_release-1.0.0.aar")
             //     if (flutterReleaseAar.exists()) {
             //         artifact(flutterReleaseAar)
             //     }
             // }
-            
-          
+
+
         }
     }
 }

@@ -137,7 +137,7 @@ class AzeooUser private constructor(
         ) { result ->
             when {
                 result.isSuccess -> {
-                    val profileData = result.getOrNull() as? Map<String, Any>
+                    val profileData = result.getOrNull() as? Map<*, *>
                     if (profileData != null) {
                         val userProfile = UserProfile(
                             id = profileData["id"] as? String ?: userId,
